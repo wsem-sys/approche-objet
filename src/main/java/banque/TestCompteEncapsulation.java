@@ -16,13 +16,13 @@ public class TestCompteEncapsulation {
         /*
          * 1) Création d'une instance de Compte.
          *    - Le numéro de compte est "123jsdbhjkfb".
-         *    - Le solde initial est 1000000.0.
+         *    - Le solde initial est 1000.0.
          */
-        Compte monCompte = new Compte("123jsdbhjkfb", 1000000.0);
+        Compte monCompte = new Compte("123jsdbhjkfb", 1000.0);
 
         /*
          * 2) Modification du solde du compte en utilisant le setter.
-         *    Par exemple, on ajoute 500.0 à l'ancien solde (1000000.0),
+         *    Par exemple, on ajoute 500.0 à l'ancien solde (1000.0),
          *    ce qui donne un nouveau solde de 1500.0.
          */
         monCompte.setSolde(1500.0);

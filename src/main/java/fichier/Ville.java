@@ -1,103 +1,60 @@
 package fichier;
 
 /**
- * Représente une Ville avec ses principales caractéristiques.
+ * Classe représentant une ville avec ses attributs
  *
- * <p>
- * Chaque ville est définie par :
- * <ul>
- *   <li>Un code de région</li>
- *   <li>Un nom de région</li>
- *   <li>Un code de département</li>
- *   <li>Un code de commune</li>
- *   <li>Un nom de commune</li>
- *   <li>Une population</li>
- * </ul>
- * </p>
+ * @author wsem
  *
- * @author
  */
 public class Ville {
+    /** Nom de la ville */
+    private String nom;
 
-    /**
-     * Code de la région.
-     */
-    private String codeRegion;
-
-    /**
-     * Nom de la région.
-     */
-    private String nomRegion;
-
-    /**
-     * Code du département.
-     */
+    /** Code du département */
     private String codeDepartement;
 
-    /**
-     * Code de la commune.
-     */
-    private String codeCommune;
+    /** Nom de la région */
+    private String nomRegion;
+
+    /** Population totale */
+    private int populationTotale;
 
     /**
-     * Nom de la commune.
-     */
-    private String nomCommune;
-
-    /**
-     * Population de la commune.
-     */
-    private int population;
-
-    /**
-     * Constructeur complet de la classe Ville.
+     * Constructeur avec tous les attributs
      *
-     * @param codeRegion      Code de la région.
-     * @param nomRegion       Nom de la région.
-     * @param codeDepartement Code du département.
-     * @param codeCommune     Code de la commune.
-     * @param nomCommune      Nom de la commune.
-     * @param population      Population de la commune.
+     * @param nom Nom de la ville
+     * @param codeDepartement Code du département
+     * @param nomRegion Nom de la région
+     * @param populationTotale Population totale
      */
-    public Ville(String codeRegion, String nomRegion, String codeDepartement,
-                 String codeCommune, String nomCommune, int population) {
-        this.codeRegion = codeRegion;
-        this.nomRegion = nomRegion;
+    public Ville(String nom, String codeDepartement, String nomRegion, int populationTotale) {
+        this.nom = nom;
         this.codeDepartement = codeDepartement;
-        this.codeCommune = codeCommune;
-        this.nomCommune = nomCommune;
-        this.population = population;
-    }
-
-    /**
-     * @return le code de la région
-     */
-    public String getCodeRegion() {
-        return codeRegion;
-    }
-
-    /**
-     * @param codeRegion définit le code de la région
-     */
-    public void setCodeRegion(String codeRegion) {
-        this.codeRegion = codeRegion;
-    }
-
-    /**
-     * @return le nom de la région
-     */
-    public String getNomRegion() {
-        return nomRegion;
-    }
-
-    /**
-     * @param nomRegion définit le nom de la région
-     */
-    public void setNomRegion(String nomRegion) {
         this.nomRegion = nomRegion;
+        this.populationTotale = populationTotale;
     }
 
     /**
+     * Retourne le nom de la ville
+     *
+     * @return le nom de la ville
+     */
+    public String getNom() {
+        return nom;
+    }
+
+    /**
+     * Définit le nom de la ville
+     *
+     * @param nom le nouveau nom de la ville
+     */
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    /**
+     * Retourne le code du département
+     *
      * @return le code du département
      */
     public String getCodeDepartement() {
@@ -105,66 +62,53 @@ public class Ville {
     }
 
     /**
-     * @param codeDepartement définit le code du département
+     * Définit le code du département
+     *
+     * @param codeDepartement le nouveau code du département
      */
     public void setCodeDepartement(String codeDepartement) {
         this.codeDepartement = codeDepartement;
     }
 
     /**
-     * @return le code de la commune
-     */
-    public String getCodeCommune() {
-        return codeCommune;
-    }
-
-    /**
-     * @param codeCommune définit le code de la commune
-     */
-    public void setCodeCommune(String codeCommune) {
-        this.codeCommune = codeCommune;
-    }
-
-    /**
-     * @return le nom de la commune
-     */
-    public String getNomCommune() {
-        return nomCommune;
-    }
-
-    /**
-     * @param nomCommune définit le nom de la commune
-     */
-    public void setNomCommune(String nomCommune) {
-        this.nomCommune = nomCommune;
-    }
-
-    /**
-     * @return la population de la commune
-     */
-    public int getPopulation() {
-        return population;
-    }
-
-    /**
-     * @param population définit la population de la commune
-     */
-    public void setPopulation(int population) {
-        this.population = population;
-    }
-
-    /**
-     * Retourne une chaîne de caractères représentant la ville.
+     * Retourne le nom de la région
      *
-     * @return description textuelle de la Ville
+     * @return le nom de la région
      */
+    public String getNomRegion() {
+        return nomRegion;
+    }
+
+    /**
+     * Définit le nom de la région
+     *
+     * @param nomRegion le nouveau nom de la région
+     */
+    public void setNomRegion(String nomRegion) {
+        this.nomRegion = nomRegion;
+    }
+
+    /**
+     * Retourne la population totale
+     *
+     * @return la population totale
+     */
+    public int getPopulationTotale() {
+        return populationTotale;
+    }
+
+    /**
+     * Définit la population totale
+     *
+     * @param populationTotale la nouvelle population totale
+     */
+    public void setPopulationTotale(int populationTotale) {
+        this.populationTotale = populationTotale;
+    }
+
     @Override
     public String toString() {
-        return "Ville [codeRegion=" + codeRegion +
-                ", nomRegion=" + nomRegion +
-                ", codeDepartement=" + codeDepartement +
-                ", codeCommune=" + codeCommune +
-                ", nomCommune=" + nomCommune +
-                ", population=" + population + "]";
+        return "Ville [nom=" + nom + ", codeDepartement=" + codeDepartement + ", nomRegion=" + nomRegion
+                + ", populationTotale=" + populationTotale + "]";
     }
 }

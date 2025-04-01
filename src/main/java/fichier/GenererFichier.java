@@ -1,113 +1,108 @@
 package fichier;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Exercice GenererFichier
- * <p>
- * Cette classe lit le fichier recensement(in).csv, instancie des objets {@link Ville}
- * et génère un fichier de sortie contenant uniquement les villes dont la population
- * dépasse 25 000 habitants. Seules les informations utiles sont conservées dans le fichier :
- * <ul>
- *   <li>Nom (de la commune)</li>
- *   <li>Code département</li>
- *   <li>Nom de la région</li>
- *   <li>Population totale</li>
- * </ul>
- * La première ligne du fichier de sortie est une ligne d’entête.
- * </p>
+ * Classe permettant de générer un fichier contenant uniquement
+ * les villes de plus de 25 000 habitants
  *
- * Quelques rappels :
- * <ul>
- *   <li>Découper une chaîne : <code>String[] tokens = maChaine.split(";");</code></li>
- *   <li>Retirer les espaces superflus : <code>maValeur = maValeur.trim().replaceAll(" ", "");</code></li>
- * </ul>
+ * @author wsem
+ *
  */
 public class GenererFichier {
 
     /**
-     * Point d'entrée de l'application.
+     * Méthode principale pour exécuter le programme
      *
-     * @param args Arguments de la ligne de commande (non utilisés).
+     * @param args arguments de la ligne de commande (non utilisés)
      */
     public static void main(String[] args) {
-        // Chemin du fichier source
-        File fichierSource = new File("src/main/java/fichier/recensement(in).csv");
-        if (!fichierSource.exists()) {
-            System.err.println("Le fichier " + fichierSource.getAbsolutePath() + " est introuvable.");
-            return;
-        }
+        // Définition du chemin du fichier source
+        Path sourcePath = Paths.get("ressources/recensement.csv");
 
-        // Constitution de la liste de villes à partir du fichier source
-        ArrayList<Ville> listeVilles = new ArrayList<>();
+        // Définition du chemin du fichier de destination
+        Path destPath = Paths.get("ressources/grandes_villes.csv");
 
-        try (BufferedReader br = new BufferedReader(new FileReader(fichierSource))) {
-            // Lecture de la ligne d'entête
-            String ligne = br.readLine();
+        // Seuil de population
+        final int SEUIL_POPULATION = 25000;
 
-            // Lecture de chaque ligne du fichier
-            while ((ligne = br.readLine()) != null) {
-                // Découper la ligne en tokens en se basant sur le séparateur ';'
-                String[] tokens = ligne.split(";");
-                if (tokens.length < 6) {
-                    System.err.println("Données incomplètes pour la ligne: " + ligne);
+        try {
+            // Création d'une ArrayList pour stocker les villes
+            ArrayList<Ville> toutesVilles = new ArrayList<>();
+
+            // Lecture du contenu du fichier avec encoding UTF-8
+            List<String> lines = Files.readAllLines(sourcePath, StandardCharsets.UTF_8);
+
+            // Ignorer la première ligne (en-tête)
+            boolean premiereLigne = true;
+
+            for (String line : lines) {
+                if (premiereLigne) {
+                    premiereLigne = false;
                     continue;
                 }
-                // Récupérer et nettoyer les données
-                String codeRegion = tokens[0].trim().replaceAll(" ", "");
+
+                // Découpage de la ligne en utilisant le séparateur ";"
+                String[] tokens = line.split(";");
+
+                // Nettoyage et extraction des données
+                String nomCommune = tokens[6].trim();
+                String codeDepartement = tokens[2].trim();
                 String nomRegion = tokens[1].trim();
-                String codeDepartement = tokens[2].trim().replaceAll(" ", "");
-                String codeCommune = tokens[3].trim().replaceAll(" ", "");
-                String nomCommune = tokens[4].trim();
-                int population = 0;
-                try {
-                    population = Integer.parseInt(tokens[5].trim().replaceAll(" ", ""));
-                } catch (NumberFormatException e) {
-                    System.err.println("Population non valide pour la ligne: " + ligne);
-                    continue;
+
+                // Conversion de la population (en retirant les espaces)
+                String populationStr = tokens[9].trim().replace(" ", "");
+                int population = Integer.parseInt(populationStr);
+
+                // Création d'une instance de Ville et ajout à la liste
+                Ville ville = new Ville(nomCommune, codeDepartement, nomRegion, population);
+                toutesVilles.add(ville);
+            }
+
+            // Filtrer les villes ayant plus de 25 000 habitants
+            ArrayList<Ville> grandesVilles = new ArrayList<>();
+            for (Ville ville : toutesVilles) {
+                if (ville.getPopulationTotale() > SEUIL_POPULATION) {
+                    grandesVilles.add(ville);
                 }
-
-                // Instanciation d'un objet Ville
-                Ville ville = new Ville(codeRegion, nomRegion, codeDepartement, codeCommune, nomCommune, population);
-                listeVilles.add(ville);
             }
+
+            // Préparer le contenu du fichier de sortie
+            List<String> outputLines = new ArrayList<>();
+
+            // Ajout de la ligne d'en-tête
+            outputLines.add("Nom;Code département;Nom de la région;Population totale");
+
+            // Ajout des données des grandes villes
+            for (Ville ville : grandesVilles) {
+                String ligne = ville.getNom() + ";"
+                        + ville.getCodeDepartement() + ";"
+                        + ville.getNomRegion() + ";"
+                        + ville.getPopulationTotale();
+                outputLines.add(ligne);
+            }
+
+            // Écriture dans le fichier de destination
+            Files.write(destPath, outputLines, StandardCharsets.UTF_8);
+
+            System.out.println("Génération réussie !");
+            System.out.println("Nombre de villes trouvées : " + toutesVilles.size());
+            System.out.println("Nombre de grandes villes (> " + SEUIL_POPULATION + " habitants) : " + grandesVilles.size());
+            System.out.println("Fichier généré : " + destPath);
+
         } catch (IOException e) {
+            // Gestion des exceptions d'entrée/sortie
+            System.err.println("Erreur lors de la manipulation des fichiers : " + e.getMessage());
             e.printStackTrace();
-        }
-
-        // Affichage du nombre total de villes lues pour debug
-        System.out.println("Nombre total de villes lues : " + listeVilles.size());
-
-        // Filtrer les villes de plus de 25 000 habitants
-        ArrayList<Ville> villesPlus25000 = new ArrayList<>();
-        for (Ville v : listeVilles) {
-            if (v.getPopulation() > 25000) {
-                villesPlus25000.add(v);
-            }
-        }
-        System.out.println("Nombre de villes avec plus de 25 000 habitants : " + villesPlus25000.size());
-
-        // Génération du fichier de sortie
-        File fichierSortie = new File("src/main/java/fichier/recensement_plus_25000.csv");
-
-        try (FileWriter fw = new FileWriter(fichierSortie)) {
-            // Écrire la ligne d'en-tête
-            fw.write("Nom;Code département;Nom de la région;Population totale" + System.lineSeparator());
-
-            // Écrire les villes filtrées
-            for (Ville v : villesPlus25000) {
-                fw.write(v.getNomCommune() + ";" +
-                        v.getCodeDepartement() + ";" +
-                        v.getNomRegion() + ";" +
-                        v.getPopulation() + System.lineSeparator());
-            }
-            System.out.println("Fichier généré avec succès : " + fichierSortie.getAbsolutePath());
-        } catch (IOException e) {
+        } catch (NumberFormatException e) {
+            // Gestion des erreurs de format numérique
+            System.err.println("Erreur lors de la conversion des données : " + e.getMessage());
             e.printStackTrace();
         }
     }

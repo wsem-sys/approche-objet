@@ -2,25 +2,18 @@ package tri;
 
 /**
  * Représente une ville avec un nom et un nombre d'habitants.
- * Implémente l'interface Comparable pour permettre le tri par nom.
+ * Implémente Comparable pour permettre un tri alphabétique par nom.
  */
 public class Ville implements Comparable<Ville> {
 
-    /**
-     * Nom de la ville
-     */
     private String nom;
-
-    /**
-     * Nombre d'habitants de la ville
-     */
     private int nbHabitants;
 
     /**
-     * Constructeur permettant d'initialiser la ville avec un nom et un nombre d'habitants.
+     * Constructeur permettant d'initialiser la ville avec un nom et un nb d'habitants.
      *
-     * @param nom          le nom de la ville
-     * @param nbHabitants  le nombre d'habitants de la ville
+     * @param nom le nom de la ville
+     * @param nbHabitants le nombre d'habitants de la ville
      */
     public Ville(String nom, int nbHabitants) {
         this.nom = nom;
@@ -28,8 +21,7 @@ public class Ville implements Comparable<Ville> {
     }
 
     /**
-     * Retourne le nom de la ville
-     *
+     * Getter pour le nom de la ville.
      * @return nom de la ville
      */
     public String getNom() {
@@ -37,17 +29,15 @@ public class Ville implements Comparable<Ville> {
     }
 
     /**
-     * Modifie le nom de la ville
-     *
-     * @param nom nouveau nom de la ville
+     * Setter pour le nom de la ville.
+     * @param nom nom de la ville
      */
     public void setNom(String nom) {
         this.nom = nom;
     }
 
     /**
-     * Retourne le nombre d'habitants de la ville
-     *
+     * Getter pour le nombre d'habitants.
      * @return nombre d'habitants
      */
     public int getNbHabitants() {
@@ -55,8 +45,7 @@ public class Ville implements Comparable<Ville> {
     }
 
     /**
-     * Modifie le nombre d'habitants de la ville
-     *
+     * Setter pour le nombre d'habitants.
      * @param nbHabitants nouveau nombre d'habitants
      */
     public void setNbHabitants(int nbHabitants) {
@@ -64,25 +53,21 @@ public class Ville implements Comparable<Ville> {
     }
 
     /**
-     * Retourne une représentation textuelle de la ville
-     *
-     * @return une chaîne de caractères avec le nom et le nombre d'habitants
+     * Compare deux villes par leur nom (ordre alphabétique, insensible à la casse).
+     * @param autreVille l'autre ville à comparer
+     * @return un entier négatif, nul ou positif selon l'ordre alphabétique
+     */
+    @Override
+    public int compareTo(Ville autreVille) {
+        return this.nom.compareToIgnoreCase(autreVille.getNom());
+    }
+
+    /**
+     * Représente la ville sous forme de chaîne de caractères.
+     * @return nom et nombre d'habitants de la ville
      */
     @Override
     public String toString() {
         return nom + " (" + nbHabitants + " hab.)";
-    }
-
-    /**
-     * Compare cette ville à une autre ville selon leur nom (ordre alphabétique).
-     *
-     * @param autreVille l'autre ville à comparer
-     * @return un entier négatif, nul ou positif selon l'ordre alphabétique des noms
-     */
-    @Override
-    public int compareTo(Ville autreVille) {
-        // Tri alphabétique basé sur le nom
-        // Si vous souhaitez ignorer la casse, utilisez compareToIgnoreCase
-        return this.nom.compareTo(autreVille.nom);
     }
 }
